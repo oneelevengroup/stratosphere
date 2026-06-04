@@ -29,7 +29,7 @@ export default function Hero() {
       </div>
 
       <div className="wrap hero-inner">
-        <span className="eyebrow reveal">Phil Stringer Presents &mdash; The Stratosphere</span>
+        <span className="eyebrow reveal">Phil Stringer Presents The Stratosphere</span>
         <h1 className="reveal">
           Rise <span className="lime">Above</span>
           <br />
