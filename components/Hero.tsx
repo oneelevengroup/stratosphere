@@ -55,6 +55,9 @@ export default function Hero() {
         </div>
       </header>
 
+      {/* dark sky you fall through — gives the cloud dive room to breathe */}
+      <div className="dive-runway" aria-hidden="true" />
+
       {/* clouds you fly through as the hero scrolls away */}
       <DiveClouds />
     </>

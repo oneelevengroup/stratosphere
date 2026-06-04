@@ -11,6 +11,7 @@ export default function DiveClouds() {
   return (
     <div className="dive-clouds" aria-hidden="true">
       <div className="dive-cloud far" />
+      <div className="dive-cloud mid" />
       <div className="dive-cloud near" />
     </div>
   );

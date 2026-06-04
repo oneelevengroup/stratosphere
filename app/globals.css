@@ -194,77 +194,121 @@ nav.scrolled {
 }
 .dive-cloud {
   position: absolute;
-  inset: -30%;
+  inset: -45%;
   background-size: cover;
   background-position: center;
   opacity: 0;
   transform: translateZ(0) scale(1);
   will-change: transform, opacity;
 }
+/* far + mid share the wispy texture (sampled at different spots) for depth;
+   near is the dense cloud that fully envelops you at the bottom of the dive */
 .dive-cloud.far {
   background-image: url("/cloud-far.png");
+  background-position: 28% 32%;
+}
+.dive-cloud.mid {
+  background-image: url("/cloud-far.png");
+  background-position: 72% 64%;
 }
 .dive-cloud.near {
   background-image: url("/cloud-near.png");
 }
 
+/* dark sky runway: extra scroll distance after the hero so the dive has room
+   to play out — you fall through the cloud bank before the next section.
+   Collapsed to 0 by default; only the supported, motion-OK path below gives it
+   height, so browsers without the dive don't get a dead empty gap. */
+.dive-runway {
+  position: relative;
+  height: 0;
+  background: linear-gradient(180deg, #050505, #07080a);
+}
+
 @keyframes heroZoom {
   to {
-    transform: scale(2.3);
+    transform: scale(2.4);
     opacity: 0;
   }
 }
-@keyframes diveCloudFar {
+/* each layer keeps scaling AND drifting the whole way through, so the cloud
+   visibly rushes past you (forward motion) instead of sitting as a static veil */
+@keyframes diveFar {
   0% {
     opacity: 0;
-    transform: scale(1);
+    transform: translate3d(0, 3%, 0) scale(1.05);
   }
-  50% {
-    opacity: 0.65;
+  38% {
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0.45;
+    transform: translate3d(5%, -6%, 0) scale(2.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(9%, -11%, 0) scale(2.9);
+  }
+}
+@keyframes diveMid {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 4%, 0) scale(1.2);
+  }
+  42% {
+    opacity: 0.7;
   }
   72% {
-    opacity: 0.55;
-    transform: scale(1.9);
+    opacity: 0.6;
+    transform: translate3d(-6%, -5%, 0) scale(2.9);
   }
   100% {
     opacity: 0;
-    transform: scale(2.5);
+    transform: translate3d(-11%, -10%, 0) scale(3.7);
   }
 }
-@keyframes diveCloudNear {
+@keyframes diveNear {
   0% {
     opacity: 0;
-    transform: scale(1);
+    transform: translate3d(0, 5%, 0) scale(1);
   }
-  55% {
-    opacity: 0.95;
+  40% {
+    opacity: 0.97;
   }
-  80% {
+  72% {
     opacity: 0.98;
-    transform: scale(1.5);
+    transform: translate3d(-4%, -7%, 0) scale(1.7);
   }
   100% {
     opacity: 0;
-    transform: scale(1.9);
+    transform: translate3d(-7%, -14%, 0) scale(2.2);
   }
 }
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
+    .dive-runway {
+      height: 95vh;
+    }
     .hero-zoom {
       animation: heroZoom linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 82vh;
+      animation-range: 0 88vh;
     }
     .dive-cloud.far {
-      animation: diveCloudFar linear both;
+      animation: diveFar linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 104vh;
+      animation-range: 0 165vh;
+    }
+    .dive-cloud.mid {
+      animation: diveMid linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 180vh;
     }
     .dive-cloud.near {
-      animation: diveCloudNear linear both;
+      animation: diveNear linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 112vh;
+      animation-range: 0 195vh;
     }
   }
 }
