@@ -25,12 +25,11 @@ export default function Nav() {
         </span>
       </Link>
       <div className="nav-links">
-        <a href="#premise">The Program</a>
-        <a href="#inside">What&apos;s Inside</a>
-        <a href="#ascent">The Ascent</a>
-        <a href="#phil">Phil</a>
+        <Link href="/">Home</Link>
+        <a href="#inside">What&apos;s Included</a>
+        <a href="#phil">About Phil</a>
         <Link href="/apply" className="nav-cta">
-          Apply
+          Join The Next Ascent
         </Link>
       </div>
     </nav>

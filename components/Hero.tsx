@@ -29,7 +29,7 @@ export default function Hero() {
       </div>
 
       <div className="wrap hero-inner">
-        <span className="eyebrow reveal">A Phil Stringer Program</span>
+        <span className="eyebrow reveal">Phil Stringer Presents &mdash; The Stratosphere</span>
         <h1 className="reveal">
           Rise <span className="lime">Above</span>
           <br />
@@ -42,10 +42,10 @@ export default function Hero() {
         </p>
         <div className="cta-row reveal">
           <Link href="/apply" className="btn-primary">
-            Apply for the next cohort
+            Join The Next Ascent
           </Link>
-          <a href="#premise" className="btn-ghost">
-            <span className="ico">&#9658;</span> Watch the overview
+          <a href="#phil" className="btn-ghost">
+            Who Is Phil Stringer
           </a>
         </div>
       </div>

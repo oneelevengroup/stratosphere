@@ -96,15 +96,10 @@ nav.scrolled {
   text-decoration: none;
 }
 .brand .logomark {
-  width: 40px;
-  height: 22px;
+  width: 36px;
+  height: 36px;
   flex: none;
-}
-.brand .logomark path {
-  stroke: var(--lime);
-  stroke-width: 9;
-  fill: none;
-  stroke-linecap: round;
+  object-fit: contain;
 }
 .brand .txt {
   display: flex;
