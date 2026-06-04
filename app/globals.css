@@ -178,15 +178,29 @@ nav.scrolled {
   transform-origin: 50% 46%;
 }
 
-/* --- dive-into-the-clouds scroll effect ---
-   No pinning: the page scrolls normally. The headline zooms toward the
-   viewer and the cloud layers swell up to envelop the screen, all driven by
-   the native scroll position via CSS scroll-driven animations (compositor-run,
-   so they stay glued to the scroll with no JS jitter). Everything is gated on
-   scroll-timeline support + reduced-motion below, so unsupported browsers just
-   get a normal, static hero. */
+/* --- dive-into-the-clouds: pinned scroll-scrub + crossfade ---
+   The hero PINS (sticky) so scrolling scrubs the zoom-into-clouds in place
+   instead of the page sliding away. The next section sits directly behind the
+   pin (pulled up with a negative margin) and is revealed by crossfading the
+   whole pinned layer out — so you pass through the clouds and the next screen
+   fades in where it sits, rather than scrolling up from below. All
+   compositor-driven and gated on support + reduced-motion (below), so
+   unsupported browsers fall back to a normal static hero + page. */
+.dive-stage {
+  position: relative;
+  /* the stage overlaps the next section during the crossfade; let clicks pass
+     straight through it (the pin re-enables hits for the hero itself) */
+  pointer-events: none;
+}
+.dive-pin {
+  position: relative;
+  pointer-events: auto;
+}
+.after-dive {
+  position: relative;
+}
 .dive-clouds {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 40;
   pointer-events: none;
@@ -215,16 +229,6 @@ nav.scrolled {
   background-image: url("/cloud-near.png");
 }
 
-/* dark sky runway: extra scroll distance after the hero so the dive has room
-   to play out — you fall through the cloud bank before the next section.
-   Collapsed to 0 by default; only the supported, motion-OK path below gives it
-   height, so browsers without the dive don't get a dead empty gap. */
-.dive-runway {
-  position: relative;
-  height: 0;
-  background: linear-gradient(180deg, #050505, #07080a);
-}
-
 @keyframes heroZoom {
   to {
     transform: scale(2.4);
@@ -238,23 +242,37 @@ nav.scrolled {
     transform: scale(1.7);
   }
 }
-/* each layer keeps scaling AND drifting the whole way through, so the cloud
-   visibly rushes past you (forward motion) instead of sitting as a static veil */
+/* fade the whole pinned hero+cloud layer out at the end of the scrub — this is
+   the crossfade that reveals the next section sitting behind it. pointer-events
+   flips off once faded so that content becomes clickable. */
+@keyframes divePinFade {
+  0% {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  72% {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+/* each layer keeps scaling AND drifting as it builds (forward motion), then
+   HOLDS its peak — the pin-fade above dissolves it, so we cross-dissolve out of
+   the clouds rather than the clouds self-fading early */
 @keyframes diveFar {
   0% {
     opacity: 0;
     transform: translate3d(0, 3%, 0) scale(1.05);
   }
-  38% {
+  45% {
     opacity: 0.5;
   }
-  70% {
-    opacity: 0.45;
-    transform: translate3d(5%, -6%, 0) scale(2.2);
-  }
   100% {
-    opacity: 0;
-    transform: translate3d(9%, -11%, 0) scale(2.9);
+    opacity: 0.5;
+    transform: translate3d(7%, -9%, 0) scale(2.6);
   }
 }
 @keyframes diveMid {
@@ -262,16 +280,12 @@ nav.scrolled {
     opacity: 0;
     transform: translate3d(0, 4%, 0) scale(1.2);
   }
-  42% {
-    opacity: 0.7;
-  }
-  72% {
-    opacity: 0.6;
-    transform: translate3d(-6%, -5%, 0) scale(2.9);
+  50% {
+    opacity: 0.66;
   }
   100% {
-    opacity: 0;
-    transform: translate3d(-11%, -10%, 0) scale(3.7);
+    opacity: 0.62;
+    transform: translate3d(-9%, -8%, 0) scale(3.3);
   }
 }
 @keyframes diveNear {
@@ -279,48 +293,62 @@ nav.scrolled {
     opacity: 0;
     transform: translate3d(0, 5%, 0) scale(1);
   }
-  40% {
+  55% {
     opacity: 0.97;
   }
-  72% {
-    opacity: 0.98;
-    transform: translate3d(-4%, -7%, 0) scale(1.7);
-  }
   100% {
-    opacity: 0;
-    transform: translate3d(-7%, -14%, 0) scale(2.2);
+    opacity: 0.98;
+    transform: translate3d(-4%, -9%, 0) scale(1.9);
   }
 }
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .dive-runway {
-      height: 95vh;
+    /* tall stage gives the pin its scroll travel; the pin sticks for one
+       viewport while the scrub plays, then the crossfade hands off */
+    .dive-stage {
+      height: 185vh;
+      z-index: 5;
+    }
+    .dive-pin {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      animation: divePinFade linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 85vh;
+    }
+    /* the next section is pulled up to sit exactly behind the pinned screen,
+       so the crossfade reveals it in place instead of it scrolling up */
+    .after-dive {
+      margin-top: -100vh;
+      z-index: 1;
     }
     .hero-zoom {
       animation: heroZoom linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 88vh;
+      animation-range: 0 60vh;
     }
     .hero-video {
       animation: heroVideoZoom linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 110vh;
+      animation-range: 0 78vh;
     }
     .dive-cloud.far {
       animation: diveFar linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 165vh;
+      animation-range: 0 66vh;
     }
     .dive-cloud.mid {
       animation: diveMid linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 180vh;
+      animation-range: 0 70vh;
     }
     .dive-cloud.near {
       animation: diveNear linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 195vh;
+      animation-range: 0 64vh;
     }
   }
 }

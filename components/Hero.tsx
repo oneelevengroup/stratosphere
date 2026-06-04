@@ -3,63 +3,54 @@ import Clouds from "./Clouds";
 import CloudDeck from "./CloudDeck";
 import Stars from "./Stars";
 import MarbleVeins from "./MarbleVeins";
-import DiveClouds from "./DiveClouds";
 
 export default function Hero() {
   return (
-    <>
-      <header className="hero">
-        <div className="hero-video" aria-hidden="true">
-          <video autoPlay muted loop playsInline preload="auto">
-            <source src="/hero.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <MarbleVeins />
-        <Stars />
-        <div className="horizon" />
-        {/* faint high cirrus far above the deck */}
-        <Clouds id="clouds" count={4} band={[8, 30]} />
-        {/* the sea of clouds you are flying above */}
-        <CloudDeck />
+    <header className="hero">
+      <div className="hero-video" aria-hidden="true">
+        <video autoPlay muted loop playsInline preload="auto">
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <MarbleVeins />
+      <Stars />
+      <div className="horizon" />
+      {/* faint high cirrus far above the deck */}
+      <Clouds id="clouds" count={4} band={[8, 30]} />
+      {/* the sea of clouds you are flying above */}
+      <CloudDeck />
 
-        <div className="alt-rail" aria-hidden="true">
-          <span>80 KM</span>
-          <span>50 KM</span>
-          <span className="on">STRATOSPHERE</span>
-          <span>20 KM</span>
-          <span>SEA LEVEL</span>
-        </div>
+      <div className="alt-rail" aria-hidden="true">
+        <span>80 KM</span>
+        <span>50 KM</span>
+        <span className="on">STRATOSPHERE</span>
+        <span>20 KM</span>
+        <span>SEA LEVEL</span>
+      </div>
 
-        <div className="hero-zoom">
-          <div className="wrap hero-inner">
-            <span className="eyebrow reveal">Phil Stringer Presents The Stratosphere</span>
-            <h1 className="reveal">
-              Rise <span className="lime">Above</span>
-              <br />
-              The Noise.
-            </h1>
-            <p className="lede reveal">
-              AI training that actually moves the needle.{" "}
-              <b>Live coaching, certification, and a private room of operators</b> who
-              treat AI as leverage, not a novelty.
-            </p>
-            <div className="cta-row reveal">
-              <Link href="/apply" className="btn-primary">
-                Join The Next Ascent
-              </Link>
-              <a href="#phil" className="btn-ghost">
-                Who Is Phil Stringer
-              </a>
-            </div>
+      <div className="hero-zoom">
+        <div className="wrap hero-inner">
+          <span className="eyebrow reveal">Phil Stringer Presents The Stratosphere</span>
+          <h1 className="reveal">
+            Rise <span className="lime">Above</span>
+            <br />
+            The Noise.
+          </h1>
+          <p className="lede reveal">
+            AI training that actually moves the needle.{" "}
+            <b>Live coaching, certification, and a private room of operators</b> who
+            treat AI as leverage, not a novelty.
+          </p>
+          <div className="cta-row reveal">
+            <Link href="/apply" className="btn-primary">
+              Join The Next Ascent
+            </Link>
+            <a href="#phil" className="btn-ghost">
+              Who Is Phil Stringer
+            </a>
           </div>
         </div>
-      </header>
-
-      {/* dark sky you fall through — gives the cloud dive room to breathe */}
-      <div className="dive-runway" aria-hidden="true" />
-
-      {/* clouds you fly through as the hero scrolls away */}
-      <DiveClouds />
-    </>
+      </div>
+    </header>
   );
 }
