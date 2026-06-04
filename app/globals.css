@@ -45,7 +45,7 @@ body {
   color: var(--ink);
   font-family: var(--body);
   line-height: 1.65;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 ::selection {
@@ -163,13 +163,66 @@ nav.scrolled {
 }
 
 /* ===================== HERO ===================== */
-.hero {
+/* tall scroll runway: the hero pins while the "dive" effect is scrubbed */
+.hero-stage {
+  --p: 0;
   position: relative;
-  min-height: 100vh;
+  height: 185vh;
+}
+.hero {
+  position: sticky;
+  top: 0;
+  height: 100vh;
   display: flex;
   align-items: center;
   overflow: hidden;
   padding-top: 90px;
+}
+
+/* --- dive-into-the-clouds scroll effect (driven by --p, 0→1) --- */
+/* headline block rushes toward the viewer and dissolves */
+.hero .hero-inner {
+  transform-origin: 34% 46%;
+  transform: scale(calc(1 + var(--p) * 1.35)) translateY(calc(var(--p) * -6vh));
+  opacity: calc(1 - var(--p) * 1.18);
+  filter: blur(calc(var(--p) * 4px));
+  will-change: transform, opacity;
+}
+/* the cloud sea swells up and scales past you */
+.hero .cloud-deck {
+  transform-origin: 50% 100%;
+  transform: translateY(calc(var(--p) * -38vh)) scale(calc(1 + var(--p) * 1.9));
+  will-change: transform;
+}
+/* high cirrus drifts forward more gently */
+.hero .clouds {
+  transform: scale(calc(1 + var(--p) * 0.7));
+  will-change: transform;
+}
+/* peripheral chrome clears out early */
+.hero .alt-rail {
+  opacity: calc(1 - var(--p) * 2.2);
+}
+.hero .hero-video {
+  transform: scale(calc(1 + var(--p) * 0.25));
+}
+/* cloud veil that swells up and envelops the screen at the bottom of the dive */
+.dive-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  transform-origin: 50% 100%;
+  transform: scale(calc(1 + var(--p) * 0.4));
+  background: radial-gradient(
+    155% 115% at 50% 100%,
+    rgba(236, 240, 247, 0.97) 0%,
+    rgba(216, 226, 238, 0.88) 36%,
+    rgba(206, 217, 232, 0.5) 64%,
+    rgba(202, 214, 230, 0) 86%
+  );
+  opacity: calc((var(--p) - 0.38) * 2.7);
+  will-change: opacity, transform;
 }
 .hero::before {
   content: "";
@@ -988,5 +1041,26 @@ footer {
   .reveal {
     opacity: 1 !important;
     transform: none !important;
+  }
+  /* no scroll-scrubbed dive: collapse the runway and unpin the hero */
+  .hero-stage {
+    height: auto;
+  }
+  .hero {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+  .hero .hero-inner,
+  .hero .cloud-deck,
+  .hero .clouds,
+  .hero .hero-video,
+  .hero .alt-rail {
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+  .dive-veil {
+    display: none;
   }
 }
