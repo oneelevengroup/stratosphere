@@ -3,12 +3,11 @@ import Clouds from "./Clouds";
 import CloudDeck from "./CloudDeck";
 import Stars from "./Stars";
 import MarbleVeins from "./MarbleVeins";
-import HeroDive from "./HeroDive";
 import DiveClouds from "./DiveClouds";
 
 export default function Hero() {
   return (
-    <div className="hero-stage">
+    <>
       <header className="hero">
         <div className="hero-video" aria-hidden="true">
           <video autoPlay muted loop playsInline preload="auto">
@@ -31,32 +30,33 @@ export default function Hero() {
           <span>SEA LEVEL</span>
         </div>
 
-        <div className="wrap hero-inner">
-          <span className="eyebrow reveal">Phil Stringer Presents The Stratosphere</span>
-          <h1 className="reveal">
-            Rise <span className="lime">Above</span>
-            <br />
-            The Noise.
-          </h1>
-          <p className="lede reveal">
-            AI training that actually moves the needle.{" "}
-            <b>Live coaching, certification, and a private room of operators</b> who
-            treat AI as leverage, not a novelty.
-          </p>
-          <div className="cta-row reveal">
-            <Link href="/apply" className="btn-primary">
-              Join The Next Ascent
-            </Link>
-            <a href="#phil" className="btn-ghost">
-              Who Is Phil Stringer
-            </a>
+        <div className="hero-zoom">
+          <div className="wrap hero-inner">
+            <span className="eyebrow reveal">Phil Stringer Presents The Stratosphere</span>
+            <h1 className="reveal">
+              Rise <span className="lime">Above</span>
+              <br />
+              The Noise.
+            </h1>
+            <p className="lede reveal">
+              AI training that actually moves the needle.{" "}
+              <b>Live coaching, certification, and a private room of operators</b> who
+              treat AI as leverage, not a novelty.
+            </p>
+            <div className="cta-row reveal">
+              <Link href="/apply" className="btn-primary">
+                Join The Next Ascent
+              </Link>
+              <a href="#phil" className="btn-ghost">
+                Who Is Phil Stringer
+              </a>
+            </div>
           </div>
         </div>
-
-        {/* volumetric cloud planes you fly through as you dive */}
-        <DiveClouds />
       </header>
-      <HeroDive />
-    </div>
+
+      {/* clouds you fly through as the hero scrolls away */}
+      <DiveClouds />
+    </>
   );
 }

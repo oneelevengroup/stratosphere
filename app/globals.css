@@ -163,69 +163,110 @@ nav.scrolled {
 }
 
 /* ===================== HERO ===================== */
-/* tall scroll runway: the hero pins while the "dive" effect is scrubbed */
-.hero-stage {
-  --p: 0;
-  position: relative;
-  height: 185vh;
-}
 .hero {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   overflow: hidden;
   padding-top: 90px;
 }
-
-/* --- dive-into-the-clouds scroll effect (driven by --p, 0→1) --- */
-/* headline block rushes straight toward the viewer and dissolves.
-   GPU-cheap (transform + opacity only) so the scrub stays smooth. */
-.hero .hero-inner {
-  transform-origin: 50% 50%;
-  transform: scale(calc(1 + var(--p) * 1.5)) translateZ(0);
-  opacity: calc(1 - var(--p) * 1.2);
-  will-change: transform, opacity;
-}
-/* peripheral chrome clears out early */
-.hero .alt-rail {
-  opacity: calc(1 - var(--p) * 2.6);
-}
-.hero .hero-video {
-  transform-origin: 50% 58%;
-  transform: scale(calc(1 + var(--p) * 0.45)) translateZ(0);
+.hero-zoom {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  transform-origin: 50% 46%;
 }
 
-/* volumetric cloud planes you fly through */
+/* --- dive-into-the-clouds scroll effect ---
+   No pinning: the page scrolls normally. The headline zooms toward the
+   viewer and the cloud layers swell up to envelop the screen, all driven by
+   the native scroll position via CSS scroll-driven animations (compositor-run,
+   so they stay glued to the scroll with no JS jitter). Everything is gated on
+   scroll-timeline support + reduced-motion below, so unsupported browsers just
+   get a normal, static hero. */
 .dive-clouds {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 6;
+  z-index: 40;
   pointer-events: none;
   overflow: hidden;
 }
 .dive-cloud {
   position: absolute;
-  inset: -25%;
-  width: 150%;
-  height: 150%;
-  transform-origin: 50% 56%;
+  inset: -30%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: translateZ(0) scale(1);
   will-change: transform, opacity;
 }
-/* far → near: each plane scales faster and fades in later, so they rush
-   past at different depths and the nearest envelops the screen at the climax */
 .dive-cloud.far {
-  transform: scale(calc(1 + var(--p) * 2.4)) translateZ(0);
-  opacity: calc((var(--p) - 0.06) * 1.7);
-}
-.dive-cloud.mid {
-  transform: scale(calc(1 + var(--p) * 4.6)) translateZ(0);
-  opacity: calc((var(--p) - 0.26) * 1.9);
+  background-image: url("/cloud-far.png");
 }
 .dive-cloud.near {
-  transform: scale(calc(1 + var(--p) * 9)) translateZ(0);
-  opacity: calc((var(--p) - 0.5) * 2.6);
+  background-image: url("/cloud-near.png");
+}
+
+@keyframes heroZoom {
+  to {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+@keyframes diveCloudFar {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+  }
+  72% {
+    opacity: 0.55;
+    transform: scale(1.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
+@keyframes diveCloudNear {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 0.95;
+  }
+  80% {
+    opacity: 0.98;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-zoom {
+      animation: heroZoom linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 82vh;
+    }
+    .dive-cloud.far {
+      animation: diveCloudFar linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 104vh;
+    }
+    .dive-cloud.near {
+      animation: diveCloudNear linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 112vh;
+    }
+  }
 }
 .hero::before {
   content: "";
@@ -1045,21 +1086,10 @@ footer {
     opacity: 1 !important;
     transform: none !important;
   }
-  /* no scroll-scrubbed dive: collapse the runway and unpin the hero */
-  .hero-stage {
-    height: auto;
-  }
-  .hero {
-    position: relative;
-    height: auto;
-    min-height: 100vh;
-  }
-  .hero .hero-inner,
-  .hero .hero-video,
-  .hero .alt-rail {
+  /* no dive animation: static hero, hide the cloud overlay */
+  .hero-zoom {
     transform: none !important;
     opacity: 1 !important;
-    filter: none !important;
   }
   .dive-clouds {
     display: none;
