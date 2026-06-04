@@ -178,35 +178,52 @@ nav.scrolled {
   transform-origin: 50% 46%;
 }
 
-/* --- dive-into-the-clouds: pinned scroll-scrub + crossfade ---
-   The hero PINS (sticky) so scrolling scrubs the zoom-into-clouds in place
-   instead of the page sliding away. The next section sits directly behind the
-   pin (pulled up with a negative margin) and is revealed by crossfading the
-   whole pinned layer out — so you pass through the clouds and the next screen
-   fades in where it sits, rather than scrolling up from below. All
-   compositor-driven and gated on support + reduced-motion (below), so
-   unsupported browsers fall back to a normal static hero + page. */
-.dive-stage {
-  position: relative;
-  /* the stage overlaps the next section during the crossfade; let clicks pass
-     straight through it (the pin re-enables hits for the hero itself) */
-  pointer-events: none;
+/* ===================== ENTER GATE ===================== */
+/* Full-screen "Enter Site" intro. On enter it plays the dive transition
+   (accelerating video + headline zoom, cloud build, white-out flash) then fades
+   to reveal the main site beneath. Same visual language as the old scroll dive,
+   but time-based on click rather than scroll-driven. */
+.enter-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  overflow: hidden;
+  background: #050505;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.dive-pin {
-  position: relative;
-  pointer-events: auto;
-}
-.after-dive {
-  position: relative;
-}
-.dive-clouds {
+.enter-bg {
   position: absolute;
   inset: 0;
-  z-index: 40;
-  pointer-events: none;
+  z-index: 0;
   overflow: hidden;
+  transform-origin: 50% 54%;
+  will-change: transform;
 }
-.dive-cloud {
+.enter-bg video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+}
+.enter-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 4, 4, 0.6) 0%, rgba(5, 5, 5, 0.4) 50%, rgba(5, 5, 5, 0.82) 100%),
+    radial-gradient(70% 60% at 50% 42%, transparent, rgba(4, 4, 4, 0.5) 85%);
+}
+.enter-clouds {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.enter-cloud {
   position: absolute;
   inset: -45%;
   background-size: cover;
@@ -215,28 +232,96 @@ nav.scrolled {
   transform: translateZ(0) scale(1);
   will-change: transform, opacity;
 }
-/* far + mid share the wispy texture (sampled at different spots) for depth;
-   near is the dense cloud that fully envelops you at the bottom of the dive */
-.dive-cloud.far {
+.enter-cloud.far {
   background-image: url("/cloud-far.png");
   background-position: 28% 32%;
 }
-.dive-cloud.mid {
+.enter-cloud.mid {
   background-image: url("/cloud-far.png");
   background-position: 72% 64%;
 }
-.dive-cloud.near {
+.enter-cloud.near {
   background-image: url("/cloud-near.png");
 }
-/* bright white flash, painted above the clouds — blows out to a full whiteout
-   at the bottom of the dive before the crossfade reveals the next section */
-.dive-flash {
+.enter-flash {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 4;
   opacity: 0;
+  pointer-events: none;
   background: radial-gradient(120% 100% at 50% 46%, #ffffff 0%, #ffffff 55%, #f2f7fd 100%);
   will-change: opacity;
+}
+.enter-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 0 24px;
+  transform-origin: 50% 46%;
+}
+.enter-eyebrow {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.42em;
+  font-size: 12px;
+  color: var(--lime);
+  margin-bottom: 22px;
+}
+.enter-content h1 {
+  font-size: clamp(40px, 8vw, 104px);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 38px;
+}
+.enter-btn {
+  font: inherit;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 14px;
+  font-weight: 700;
+  color: #050505;
+  background: var(--lime);
+  border: 0;
+  padding: 18px 40px;
+  border-radius: 3px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.enter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(203, 251, 68, 0.28);
+}
+
+/* the transition, played by toggling .entering on the gate.
+   timeline: 0-1.45s zoom + clouds build → flash reaches full white at 1.5s and
+   holds → gate fades from white to the site at 1.8s. */
+.enter-gate.entering .enter-content {
+  animation: heroZoom 1.3s cubic-bezier(0.5, 0, 0.75, 0.3) forwards;
+}
+.enter-gate.entering .enter-bg {
+  animation: heroVideoZoom 1.9s cubic-bezier(0.55, 0, 0.85, 0.25) forwards;
+}
+.enter-gate.entering .enter-cloud.far {
+  animation: diveFar 1.45s ease-in forwards;
+}
+.enter-gate.entering .enter-cloud.mid {
+  animation: diveMid 1.45s ease-in forwards;
+}
+.enter-gate.entering .enter-cloud.near {
+  animation: diveNear 1.45s ease-in forwards;
+}
+.enter-gate.entering .enter-flash {
+  animation: diveFlash 1.4s ease-in forwards;
+}
+.enter-gate.entering {
+  animation: gateOut 0.8s 1.95s ease-in forwards;
+}
+@keyframes gateOut {
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes heroZoom {
@@ -265,23 +350,6 @@ nav.scrolled {
   }
   100% {
     transform: scale(4.3);
-  }
-}
-/* fade the whole pinned hero+cloud layer out at the end of the scrub — this is
-   the crossfade that reveals the next section sitting behind it. pointer-events
-   flips off once faded so that content becomes clickable. */
-@keyframes divePinFade {
-  0% {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  80% {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  100% {
-    opacity: 0;
-    pointer-events: none;
   }
 }
 /* the whiteout: hold transparent through the zoom, then blow out to pure white */
@@ -339,61 +407,6 @@ nav.scrolled {
   }
 }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    /* tall stage gives the pin its scroll travel; the pin sticks for one
-       viewport while the scrub plays, then the crossfade hands off */
-    .dive-stage {
-      height: 195vh;
-      z-index: 5;
-    }
-    .dive-pin {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow: hidden;
-      animation: divePinFade linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 95vh;
-    }
-    /* the next section is pulled up to sit exactly behind the pinned screen,
-       so the crossfade reveals it in place instead of it scrolling up */
-    .after-dive {
-      margin-top: -100vh;
-      z-index: 1;
-    }
-    .hero-zoom {
-      animation: heroZoom linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 66vh;
-    }
-    .hero-video {
-      animation: heroVideoZoom linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 82vh;
-    }
-    .dive-cloud.far {
-      animation: diveFar linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 72vh;
-    }
-    .dive-cloud.mid {
-      animation: diveMid linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 74vh;
-    }
-    .dive-cloud.near {
-      animation: diveNear linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 76vh;
-    }
-    .dive-flash {
-      animation: diveFlash linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 76vh;
-    }
-  }
-}
 .hero::before {
   content: "";
   position: absolute;
@@ -1214,12 +1227,10 @@ footer {
     opacity: 1 !important;
     transform: none !important;
   }
-  /* no dive animation: static hero, hide the cloud overlay */
-  .hero-zoom {
-    transform: none !important;
-    opacity: 1 !important;
-  }
-  .dive-clouds {
+  /* the enter gate skips its transition under reduced motion (handled in JS),
+     so just make sure its cloud/flash layers never show */
+  .enter-cloud,
+  .enter-flash {
     display: none;
   }
 }
