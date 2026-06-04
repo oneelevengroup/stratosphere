@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Clouds from "./Clouds";
+import CloudDeck from "./CloudDeck";
 import Stars from "./Stars";
 import MarbleVeins from "./MarbleVeins";
 
@@ -9,7 +10,10 @@ export default function Hero() {
       <MarbleVeins />
       <Stars />
       <div className="horizon" />
-      <Clouds id="clouds" count={7} band={[42, 86]} />
+      {/* faint high cirrus far above the deck */}
+      <Clouds id="clouds" count={4} band={[8, 30]} />
+      {/* the sea of clouds you are flying above */}
+      <CloudDeck />
 
       <div className="alt-rail" aria-hidden="true">
         <span>80 KM</span>
