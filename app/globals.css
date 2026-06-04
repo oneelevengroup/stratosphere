@@ -138,7 +138,7 @@ nav.scrolled {
 .nav-links a:hover {
   color: var(--white);
 }
-.nav-cta {
+.nav-links a.nav-cta {
   font-family: var(--body);
   font-weight: 700;
   font-size: 12.5px;
@@ -151,7 +151,8 @@ nav.scrolled {
   text-decoration: none;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.nav-cta:hover {
+.nav-links a.nav-cta:hover {
+  color: #000;
   transform: translateY(-2px);
   box-shadow: 0 10px 30px -8px rgba(203, 251, 68, 0.55);
 }
