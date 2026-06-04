@@ -13,6 +13,9 @@ export default function DiveClouds() {
       <div className="dive-cloud far" />
       <div className="dive-cloud mid" />
       <div className="dive-cloud near" />
+      {/* bright burst that blows out to a full whiteout at the climax, then
+          dissolves to reveal the next section */}
+      <div className="dive-flash" />
     </div>
   );
 }

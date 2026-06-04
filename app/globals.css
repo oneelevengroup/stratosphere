@@ -228,6 +228,16 @@ nav.scrolled {
 .dive-cloud.near {
   background-image: url("/cloud-near.png");
 }
+/* bright white flash, painted above the clouds — blows out to a full whiteout
+   at the bottom of the dive before the crossfade reveals the next section */
+.dive-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  background: radial-gradient(120% 100% at 50% 46%, #ffffff 0%, #ffffff 55%, #f2f7fd 100%);
+  will-change: opacity;
+}
 
 @keyframes heroZoom {
   0% {
@@ -235,11 +245,11 @@ nav.scrolled {
     opacity: 1;
   }
   55% {
-    transform: scale(1.8);
+    transform: scale(1.85);
     opacity: 0.4;
   }
   100% {
-    transform: scale(3.1);
+    transform: scale(3.4);
     opacity: 0;
   }
 }
@@ -251,10 +261,10 @@ nav.scrolled {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.75);
+    transform: scale(1.8);
   }
   100% {
-    transform: scale(3.6);
+    transform: scale(4.3);
   }
 }
 /* fade the whole pinned hero+cloud layer out at the end of the scrub — this is
@@ -265,13 +275,25 @@ nav.scrolled {
     opacity: 1;
     pointer-events: auto;
   }
-  72% {
+  80% {
     opacity: 1;
     pointer-events: auto;
   }
   100% {
     opacity: 0;
     pointer-events: none;
+  }
+}
+/* the whiteout: hold transparent through the zoom, then blow out to pure white */
+@keyframes diveFlash {
+  0% {
+    opacity: 0;
+  }
+  55% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 /* each layer keeps scaling AND drifting as it builds (forward motion), then
@@ -322,7 +344,7 @@ nav.scrolled {
     /* tall stage gives the pin its scroll travel; the pin sticks for one
        viewport while the scrub plays, then the crossfade hands off */
     .dive-stage {
-      height: 185vh;
+      height: 195vh;
       z-index: 5;
     }
     .dive-pin {
@@ -332,7 +354,7 @@ nav.scrolled {
       overflow: hidden;
       animation: divePinFade linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 85vh;
+      animation-range: 0 95vh;
     }
     /* the next section is pulled up to sit exactly behind the pinned screen,
        so the crossfade reveals it in place instead of it scrolling up */
@@ -343,27 +365,32 @@ nav.scrolled {
     .hero-zoom {
       animation: heroZoom linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 64vh;
+      animation-range: 0 66vh;
     }
     .hero-video {
       animation: heroVideoZoom linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 74vh;
+      animation-range: 0 82vh;
     }
     .dive-cloud.far {
       animation: diveFar linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 70vh;
+      animation-range: 0 72vh;
     }
     .dive-cloud.mid {
       animation: diveMid linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 72vh;
+      animation-range: 0 74vh;
     }
     .dive-cloud.near {
       animation: diveNear linear both;
       animation-timeline: scroll(root);
-      animation-range: 0 74vh;
+      animation-range: 0 76vh;
+    }
+    .dive-flash {
+      animation: diveFlash linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 76vh;
     }
   }
 }
