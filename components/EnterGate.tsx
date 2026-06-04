@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Logomark from "./Logomark";
 
 /**
- * Full-screen "Enter Site" intro. Shows the welcome text over the hero video;
- * on Enter it plays the dive transition (accelerating video/text zoom →
- * clouds → white-out flash) then fades away to reveal the main site beneath.
- * The transition is time-based (not scroll-driven) so it plays on its own.
+ * Full-screen "Welcome" intro. You enter the site by scrolling (wheel / touch /
+ * arrow keys) — or by clicking the scroll cue. That plays the dive transition
+ * (accelerating video/text zoom → clouds → white-out flash) then fades away to
+ * reveal the main site beneath. The transition is time-based so it plays on its
+ * own once triggered.
  */
 const ENTER_MS = 2800;
 
@@ -14,8 +16,8 @@ export default function EnterGate() {
   const [entering, setEntering] = useState(false);
   const [done, setDone] = useState(false);
 
-  // lock scrolling while the gate is up; pin to the top so the reveal lands
-  // on the hero
+  // lock scrolling while the gate is up; pin to the top so the reveal lands on
+  // the hero
   useEffect(() => {
     if (done) return;
     const { overflow } = document.body.style;
@@ -37,6 +39,27 @@ export default function EnterGate() {
     window.setTimeout(() => setDone(true), ENTER_MS);
   }, [entering]);
 
+  // any scroll intent enters the site
+  useEffect(() => {
+    if (done || entering) return;
+    const onWheel = () => enter();
+    const onTouch = () => enter();
+    const onKey = (e: KeyboardEvent) => {
+      if (["ArrowDown", "PageDown", "End", " ", "Spacebar", "Enter"].includes(e.key)) {
+        e.preventDefault();
+        enter();
+      }
+    };
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchmove", onTouch, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchmove", onTouch);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [done, entering, enter]);
+
   if (done) return null;
 
   return (
@@ -56,14 +79,15 @@ export default function EnterGate() {
       <div className="enter-content">
         <span className="enter-eyebrow">Phil Stringer Presents</span>
         <h1>
-          Welcome to
-          <br />
-          The Stratosphere
+          <span className="enter-pre">Welcome to</span>
+          <span className="enter-big">The Stratosphere</span>
         </h1>
-        <button type="button" className="enter-btn" onClick={enter}>
-          Enter Site
-        </button>
       </div>
+
+      <button type="button" className="enter-scroll" onClick={enter} aria-label="Scroll to enter the site">
+        <span>Scroll to Enter</span>
+        <Logomark className="enter-swoosh" />
+      </button>
     </div>
   );
 }

@@ -268,30 +268,69 @@ nav.scrolled {
   margin-bottom: 22px;
 }
 .enter-content h1 {
-  font-size: clamp(40px, 8vw, 104px);
-  line-height: 0.98;
+  margin: 0;
+  text-transform: uppercase;
   font-weight: 800;
+  line-height: 0.98;
   letter-spacing: -0.02em;
-  text-transform: uppercase;
-  margin: 0 0 38px;
 }
-.enter-btn {
-  font: inherit;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 14px;
-  font-weight: 700;
-  color: #050505;
-  background: var(--lime);
+.enter-pre {
+  display: block;
+  font-size: clamp(16px, 2.6vw, 32px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.8;
+  margin-bottom: 12px;
+}
+.enter-big {
+  display: block;
+  font-size: clamp(40px, 8vw, 104px);
+}
+/* scroll cue: you enter the site by scrolling. clickable too as a fallback. */
+.enter-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 5.5vh;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  background: none;
   border: 0;
-  padding: 18px 40px;
-  border-radius: 3px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  color: var(--white);
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  font-size: 11px;
+  opacity: 0.8;
+  transition: opacity 0.4s ease, color 0.2s ease;
 }
-.enter-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(203, 251, 68, 0.28);
+.enter-scroll:hover {
+  opacity: 1;
+  color: var(--lime);
+}
+.enter-swoosh {
+  width: 34px;
+  height: 34px;
+  opacity: 0.9;
+  animation: scrollBounce 1.9s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+/* fade the cue out the moment you enter */
+.enter-gate.entering .enter-scroll {
+  opacity: 0;
 }
 
 /* the transition, played by toggling .entering on the gate.
