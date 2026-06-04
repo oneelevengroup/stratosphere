@@ -4,6 +4,7 @@ import CloudDeck from "./CloudDeck";
 import Stars from "./Stars";
 import MarbleVeins from "./MarbleVeins";
 import HeroDive from "./HeroDive";
+import DiveClouds from "./DiveClouds";
 
 export default function Hero() {
   return (
@@ -52,8 +53,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* cloud veil that swallows the screen as you dive through the deck */}
-        <div className="dive-veil" aria-hidden="true" />
+        {/* volumetric cloud planes you fly through as you dive */}
+        <DiveClouds />
       </header>
       <HeroDive />
     </div>

@@ -180,49 +180,52 @@ nav.scrolled {
 }
 
 /* --- dive-into-the-clouds scroll effect (driven by --p, 0→1) --- */
-/* headline block rushes toward the viewer and dissolves */
+/* headline block rushes straight toward the viewer and dissolves.
+   GPU-cheap (transform + opacity only) so the scrub stays smooth. */
 .hero .hero-inner {
-  transform-origin: 34% 46%;
-  transform: scale(calc(1 + var(--p) * 1.35)) translateY(calc(var(--p) * -6vh));
-  opacity: calc(1 - var(--p) * 1.18);
-  filter: blur(calc(var(--p) * 4px));
+  transform-origin: 50% 50%;
+  transform: scale(calc(1 + var(--p) * 1.5)) translateZ(0);
+  opacity: calc(1 - var(--p) * 1.2);
   will-change: transform, opacity;
-}
-/* the cloud sea swells up and scales past you */
-.hero .cloud-deck {
-  transform-origin: 50% 100%;
-  transform: translateY(calc(var(--p) * -38vh)) scale(calc(1 + var(--p) * 1.9));
-  will-change: transform;
-}
-/* high cirrus drifts forward more gently */
-.hero .clouds {
-  transform: scale(calc(1 + var(--p) * 0.7));
-  will-change: transform;
 }
 /* peripheral chrome clears out early */
 .hero .alt-rail {
-  opacity: calc(1 - var(--p) * 2.2);
+  opacity: calc(1 - var(--p) * 2.6);
 }
 .hero .hero-video {
-  transform: scale(calc(1 + var(--p) * 0.25));
+  transform-origin: 50% 58%;
+  transform: scale(calc(1 + var(--p) * 0.45)) translateZ(0);
 }
-/* cloud veil that swells up and envelops the screen at the bottom of the dive */
-.dive-veil {
+
+/* volumetric cloud planes you fly through */
+.dive-clouds {
   position: absolute;
   inset: 0;
   z-index: 6;
   pointer-events: none;
-  transform-origin: 50% 100%;
-  transform: scale(calc(1 + var(--p) * 0.4));
-  background: radial-gradient(
-    155% 115% at 50% 100%,
-    rgba(236, 240, 247, 0.97) 0%,
-    rgba(216, 226, 238, 0.88) 36%,
-    rgba(206, 217, 232, 0.5) 64%,
-    rgba(202, 214, 230, 0) 86%
-  );
-  opacity: calc((var(--p) - 0.38) * 2.7);
-  will-change: opacity, transform;
+  overflow: hidden;
+}
+.dive-cloud {
+  position: absolute;
+  inset: -25%;
+  width: 150%;
+  height: 150%;
+  transform-origin: 50% 56%;
+  will-change: transform, opacity;
+}
+/* far → near: each plane scales faster and fades in later, so they rush
+   past at different depths and the nearest envelops the screen at the climax */
+.dive-cloud.far {
+  transform: scale(calc(1 + var(--p) * 2.4)) translateZ(0);
+  opacity: calc((var(--p) - 0.06) * 1.7);
+}
+.dive-cloud.mid {
+  transform: scale(calc(1 + var(--p) * 4.6)) translateZ(0);
+  opacity: calc((var(--p) - 0.26) * 1.9);
+}
+.dive-cloud.near {
+  transform: scale(calc(1 + var(--p) * 9)) translateZ(0);
+  opacity: calc((var(--p) - 0.5) * 2.6);
 }
 .hero::before {
   content: "";
@@ -1052,15 +1055,13 @@ footer {
     min-height: 100vh;
   }
   .hero .hero-inner,
-  .hero .cloud-deck,
-  .hero .clouds,
   .hero .hero-video,
   .hero .alt-rail {
     transform: none !important;
     opacity: 1 !important;
     filter: none !important;
   }
-  .dive-veil {
+  .dive-clouds {
     display: none;
   }
 }
