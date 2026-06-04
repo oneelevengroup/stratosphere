@@ -7,6 +7,11 @@ import MarbleVeins from "./MarbleVeins";
 export default function Hero() {
   return (
     <header className="hero">
+      <div className="hero-video" aria-hidden="true">
+        <video autoPlay muted loop playsInline preload="auto">
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+      </div>
       <MarbleVeins />
       <Stars />
       <div className="horizon" />
