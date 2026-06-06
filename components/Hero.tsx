@@ -7,13 +7,28 @@ import MarbleVeins from "./MarbleVeins";
 export default function Hero() {
   return (
     <header className="hero">
+      {/* Static cloudscape fallback — shown while the video loads and for
+          visitors with reduced motion (the video is hidden by CSS then). */}
       <MarbleVeins />
       <Stars />
       <div className="horizon" />
-      {/* faint high cirrus far above the deck */}
       <Clouds id="clouds" count={4} band={[8, 30]} />
-      {/* the sea of clouds you are flying above */}
       <CloudDeck />
+
+      {/* Real footage: flying above the cloud deck. */}
+      <video
+        className="hero-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+      >
+        <source src="/hero.mp4" type="video/mp4" />
+      </video>
+      {/* Scrim keeps the headline readable over bright footage. */}
+      <div className="hero-scrim" aria-hidden="true" />
 
       <div className="alt-rail" aria-hidden="true">
         <span>80 KM</span>
