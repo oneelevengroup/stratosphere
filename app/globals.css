@@ -89,6 +89,23 @@ nav.scrolled {
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
+/* dark text/logo at the top over the light hero (reverts once scrolled) */
+nav.light:not(.scrolled) .brand .mark {
+  color: #0f2238;
+}
+nav.light:not(.scrolled) .brand .by {
+  color: rgba(18, 39, 62, 0.62);
+}
+nav.light:not(.scrolled) .brand .logomark {
+  filter: brightness(0) saturate(0);
+  opacity: 0.78;
+}
+nav.light:not(.scrolled) .nav-links a:not(.nav-cta) {
+  color: #2c4259;
+}
+nav.light:not(.scrolled) .nav-links a:not(.nav-cta):hover {
+  color: #0f2238;
+}
 .brand {
   display: flex;
   align-items: center;
@@ -188,60 +205,70 @@ nav.scrolled {
   inset: 0;
   z-index: 2000;
   overflow: hidden;
-  background: #050505;
+  background: linear-gradient(180deg, #4f93d6 0%, #87bce7 40%, #c6e0f4 78%, #eaf4fc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.enter-bg {
+/* ---- animated sky (shared by the enter gate + hero) ---- */
+.cloud-sky {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  transform-origin: 50% 54%;
-  will-change: transform;
+  background: linear-gradient(180deg, #4f93d6 0%, #87bce7 40%, #c6e0f4 78%, #eaf4fc 100%);
+  transform-origin: 50% 52%;
 }
-.enter-bg video {
+.cloud-band {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.5;
-}
-.enter-bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(4, 4, 4, 0.6) 0%, rgba(5, 5, 5, 0.4) 50%, rgba(5, 5, 5, 0.82) 100%),
-    radial-gradient(70% 60% at 50% 42%, transparent, rgba(4, 4, 4, 0.5) 85%);
-}
-.enter-clouds {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
+  left: 0;
+  right: 0;
   pointer-events: none;
 }
-.enter-cloud {
+.cloud-band.far {
+  top: 2%;
+  height: 44%;
+}
+.cloud-band.mid {
+  top: 20%;
+  height: 52%;
+}
+.cloud-band.near {
+  bottom: -8%;
+  height: 62%;
+}
+.cloud-track {
   position: absolute;
-  inset: -45%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transform: translateZ(0) scale(1);
-  will-change: transform, opacity;
+  inset: 0;
+  width: 200%;
+  display: flex;
+  will-change: transform;
 }
-.enter-cloud.far {
-  background-image: url("/cloud-far.png");
-  background-position: 28% 32%;
+.cloud-band.far .cloud-track {
+  animation: cloudDrift 95s linear infinite;
 }
-.enter-cloud.mid {
-  background-image: url("/cloud-far.png");
-  background-position: 72% 64%;
+.cloud-band.mid .cloud-track {
+  animation: cloudDrift 72s linear infinite;
 }
-.enter-cloud.near {
-  background-image: url("/cloud-near.png");
+.cloud-band.near .cloud-track {
+  animation: cloudDrift 52s linear infinite;
+}
+.cloud-half {
+  position: relative;
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+}
+.cloud {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: drop-shadow(0 12px 22px rgba(86, 124, 166, 0.14));
+}
+@keyframes cloudDrift {
+  to {
+    transform: translateX(-50%);
+  }
 }
 .enter-flash {
   position: absolute;
@@ -258,13 +285,14 @@ nav.scrolled {
   text-align: center;
   padding: 0 24px;
   transform-origin: 50% 46%;
+  color: #12273e;
 }
 .enter-eyebrow {
   display: block;
   text-transform: uppercase;
   letter-spacing: 0.42em;
   font-size: 12px;
-  color: var(--lime);
+  color: #38597d;
   margin-bottom: 22px;
 }
 .enter-content h1 {
@@ -273,6 +301,8 @@ nav.scrolled {
   font-weight: 800;
   line-height: 0.98;
   letter-spacing: -0.02em;
+  color: #0f2238;
+  text-shadow: 0 2px 30px rgba(255, 255, 255, 0.5);
 }
 .enter-pre {
   display: block;
@@ -301,22 +331,23 @@ nav.scrolled {
   background: none;
   border: 0;
   cursor: pointer;
-  color: var(--white);
+  color: #1d3450;
   font: inherit;
   text-transform: uppercase;
   letter-spacing: 0.34em;
   font-size: 11px;
-  opacity: 0.8;
+  opacity: 0.85;
   transition: opacity 0.4s ease, color 0.2s ease;
 }
 .enter-scroll:hover {
   opacity: 1;
-  color: var(--lime);
+  color: #0c1b2c;
 }
 .enter-swoosh {
   width: 34px;
   height: 34px;
-  opacity: 0.9;
+  opacity: 0.7;
+  filter: brightness(0) saturate(0);
   animation: scrollBounce 1.9s ease-in-out infinite;
 }
 @keyframes scrollBounce {
@@ -339,17 +370,9 @@ nav.scrolled {
 .enter-gate.entering .enter-content {
   animation: heroZoom 1.3s cubic-bezier(0.5, 0, 0.75, 0.3) forwards;
 }
-.enter-gate.entering .enter-bg {
-  animation: heroVideoZoom 1.9s cubic-bezier(0.55, 0, 0.85, 0.25) forwards;
-}
-.enter-gate.entering .enter-cloud.far {
-  animation: diveFar 1.45s ease-in forwards;
-}
-.enter-gate.entering .enter-cloud.mid {
-  animation: diveMid 1.45s ease-in forwards;
-}
-.enter-gate.entering .enter-cloud.near {
-  animation: diveNear 1.45s ease-in forwards;
+/* the sky rushes forward — you dive into the clouds */
+.enter-gate.entering .enter-sky {
+  animation: skyRush 1.9s cubic-bezier(0.55, 0, 0.85, 0.25) forwards;
 }
 .enter-gate.entering .enter-flash {
   animation: diveFlash 1.4s ease-in forwards;
@@ -360,6 +383,11 @@ nav.scrolled {
 @keyframes gateOut {
   to {
     opacity: 0;
+  }
+}
+@keyframes skyRush {
+  to {
+    transform: scale(2.8);
   }
 }
 
@@ -377,20 +405,6 @@ nav.scrolled {
     opacity: 0;
   }
 }
-/* the background footage drives the drama: it starts gently then RUSHES in
-   (accelerating zoom), so it feels like you're diving headlong into the clouds
-   rather than a steady push */
-@keyframes heroVideoZoom {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.8);
-  }
-  100% {
-    transform: scale(4.3);
-  }
-}
 /* the whiteout: hold transparent through the zoom, then blow out to pure white */
 @keyframes diveFlash {
   0% {
@@ -403,57 +417,53 @@ nav.scrolled {
     opacity: 1;
   }
 }
-/* each layer keeps scaling AND drifting as it builds (forward motion), then
-   HOLDS its peak — the pin-fade above dissolves it, so we cross-dissolve out of
-   the clouds rather than the clouds self-fading early */
-@keyframes diveFar {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 3%, 0) scale(1.05);
-  }
-  45% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 0.5;
-    transform: translate3d(7%, -9%, 0) scale(2.6);
-  }
-}
-@keyframes diveMid {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 4%, 0) scale(1.2);
-  }
-  50% {
-    opacity: 0.66;
-  }
-  100% {
-    opacity: 0.62;
-    transform: translate3d(-9%, -8%, 0) scale(3.3);
-  }
-}
-@keyframes diveNear {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 5%, 0) scale(1);
-  }
-  72% {
-    opacity: 0.97;
-  }
-  100% {
-    opacity: 0.98;
-    transform: translate3d(-4%, -9%, 0) scale(1.95);
-  }
-}
-
 .hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: radial-gradient(60% 50% at 18% 24%, rgba(255, 255, 255, 0.05), transparent 60%),
-    radial-gradient(50% 60% at 88% 14%, rgba(255, 255, 255, 0.035), transparent 55%),
-    linear-gradient(180deg, #040404 0%, #070707 55%, #050505 100%);
+  display: none;
+}
+/* ---- light / airy hero (sits on the animated CloudSky) ---- */
+.hero {
+  color: #12273e;
+}
+.hero .eyebrow {
+  color: #38597d;
+}
+.hero .eyebrow::before {
+  background: #38597d;
+}
+.hero h1 {
+  color: #0f2238;
+  text-shadow: 0 2px 34px rgba(255, 255, 255, 0.5);
+}
+.hero h1 .lime {
+  color: #5f8f12;
+}
+.hero .lede {
+  color: #2c4259;
+  text-shadow: 0 1px 16px rgba(255, 255, 255, 0.55);
+}
+.hero .lede b {
+  color: #0f2238;
+}
+.hero .btn-ghost {
+  color: #13243a;
+}
+.hero .btn-ghost .ico {
+  border-color: rgba(18, 36, 58, 0.4);
+}
+.hero .btn-ghost:hover {
+  color: #5f8f12;
+}
+.hero .alt-rail span {
+  color: rgba(18, 39, 62, 0.62);
+}
+.hero .alt-rail span::after {
+  background: rgba(18, 39, 62, 0.4);
+}
+.hero .alt-rail span.on {
+  color: #15355a;
+}
+.hero .alt-rail span.on::after {
+  background: #15355a;
 }
 /* ambient background video — sits at the base of the hero stack so the
    stars, cloud band, and content layer over it */
@@ -1267,8 +1277,7 @@ footer {
     transform: none !important;
   }
   /* the enter gate skips its transition under reduced motion (handled in JS),
-     so just make sure its cloud/flash layers never show */
-  .enter-cloud,
+     so the white-out flash never shows; the sky/clouds simply sit still */
   .enter-flash {
     display: none;
   }

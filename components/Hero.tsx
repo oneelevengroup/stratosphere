@@ -1,24 +1,10 @@
 import Link from "next/link";
-import Clouds from "./Clouds";
-import CloudDeck from "./CloudDeck";
-import Stars from "./Stars";
-import MarbleVeins from "./MarbleVeins";
+import CloudSky from "./CloudSky";
 
 export default function Hero() {
   return (
     <header className="hero">
-      <div className="hero-video" aria-hidden="true">
-        <video autoPlay muted loop playsInline preload="auto">
-          <source src="/hero.mp4" type="video/mp4" />
-        </video>
-      </div>
-      <MarbleVeins />
-      <Stars />
-      <div className="horizon" />
-      {/* faint high cirrus far above the deck */}
-      <Clouds id="clouds" count={4} band={[8, 30]} />
-      {/* the sea of clouds you are flying above */}
-      <CloudDeck />
+      <CloudSky />
 
       <div className="alt-rail" aria-hidden="true">
         <span>80 KM</span>

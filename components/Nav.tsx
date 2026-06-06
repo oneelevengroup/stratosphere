@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import Logomark from "./Logomark";
 
 // Fixed nav. Transparent at top, blurs to near-black once scrolled.
-export default function Nav() {
+// `light` renders dark text/logo at the top (for the light/airy hero); once
+// scrolled the dark blurred bar takes over and the light treatment drops.
+export default function Nav({ light = false }: { light?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -16,7 +18,7 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav className={scrolled ? "scrolled" : undefined}>
+    <nav className={`${scrolled ? "scrolled" : ""}${light ? " light" : ""}`.trim() || undefined}>
       <Link href="/" className="brand">
         <Logomark className="logomark" />
         <span className="txt">
