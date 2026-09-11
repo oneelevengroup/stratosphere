@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <EnterGate />
-      <Nav light />
+      <Nav />
       <Hero />
       <Creds />
       <Premise />

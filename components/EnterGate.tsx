@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Logomark from "./Logomark";
-import CloudSky from "./CloudSky";
 
 /**
  * Full-screen "Welcome" intro. You enter the site by scrolling (wheel / touch /
@@ -65,7 +64,6 @@ export default function EnterGate() {
 
   return (
     <div className={`enter-gate${entering ? " entering" : ""}`}>
-      <CloudSky className="enter-sky" />
       <div className="enter-flash" aria-hidden="true" />
 
       <div className="enter-content">

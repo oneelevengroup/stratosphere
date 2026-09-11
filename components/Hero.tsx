@@ -1,11 +1,8 @@
 import Link from "next/link";
-import CloudSky from "./CloudSky";
 
 export default function Hero() {
   return (
     <header className="hero">
-      <CloudSky />
-
       <div className="alt-rail" aria-hidden="true">
         <span>80 KM</span>
         <span>50 KM</span>
