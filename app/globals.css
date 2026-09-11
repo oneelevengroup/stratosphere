@@ -15,9 +15,9 @@
   --line-strong: rgba(255, 255, 255, 0.18);
 
   /* brand accent */
-  --lime: #cbfb44; /* THE Phil Stringer accent */
-  --lime-bright: #dbff6b;
-  --lime-deep: #a6d62e;
+  --lime: #edaa3c; /* THE Phil Stringer accent — Fable gold */
+  --lime-bright: #f6c56a;
+  --lime-deep: #c6851c;
 
   /* text */
   --white: #ffffff;
@@ -171,7 +171,7 @@ nav.light:not(.scrolled) .nav-links a:not(.nav-cta):hover {
 .nav-links a.nav-cta:hover {
   color: #000;
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px -8px rgba(203, 251, 68, 0.55);
+  box-shadow: 0 10px 30px -8px rgba(237, 170, 60, 0.55);
 }
 @media (max-width: 880px) {
   .nav-links a:not(.nav-cta) {
@@ -435,7 +435,7 @@ nav.light:not(.scrolled) .nav-links a:not(.nav-cta):hover {
   text-shadow: 0 2px 34px rgba(255, 255, 255, 0.5);
 }
 .hero h1 .lime {
-  color: #5f8f12;
+  color: #b5780f;
 }
 .hero .lede {
   color: #2c4259;
@@ -451,7 +451,7 @@ nav.light:not(.scrolled) .nav-links a:not(.nav-cta):hover {
   border-color: rgba(18, 36, 58, 0.4);
 }
 .hero .btn-ghost:hover {
-  color: #5f8f12;
+  color: #b5780f;
 }
 .hero .alt-rail span {
   color: rgba(18, 39, 62, 0.62);
@@ -542,7 +542,7 @@ nav.light:not(.scrolled) .nav-links a:not(.nav-cta):hover {
   width: 140vw;
   height: 60vh;
   z-index: 1;
-  background: radial-gradient(60% 100% at 50% 100%, rgba(203, 251, 68, 0.16), rgba(203, 251, 68, 0) 70%);
+  background: radial-gradient(60% 100% at 50% 100%, rgba(237, 170, 60, 0.16), rgba(237, 170, 60, 0) 70%);
   filter: blur(8px);
 }
 .clouds {
@@ -602,7 +602,7 @@ nav.light:not(.scrolled) .nav-links a:not(.nav-cta):hover {
   transform: translateX(-50%);
   width: 160%;
   height: 24vh;
-  background: radial-gradient(58% 100% at 50% 0%, rgba(203, 251, 68, 0.07), transparent 70%);
+  background: radial-gradient(58% 100% at 50% 0%, rgba(237, 170, 60, 0.07), transparent 70%);
   filter: blur(10px);
   pointer-events: none;
 }
@@ -674,7 +674,7 @@ h1 .lime {
 }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 44px -10px rgba(203, 251, 68, 0.6);
+  box-shadow: 0 16px 44px -10px rgba(237, 170, 60, 0.6);
 }
 .btn-ghost {
   font-family: var(--body);
@@ -1030,7 +1030,7 @@ h2 .lime {
   aspect-ratio: 4/5;
   border-radius: 8px;
   border: 1px solid var(--line);
-  background: radial-gradient(80% 60% at 60% 12%, rgba(203, 251, 68, 0.1), transparent 60%),
+  background: radial-gradient(80% 60% at 60% 12%, rgba(237, 170, 60, 0.1), transparent 60%),
     var(--panel-2);
   display: grid;
   place-items: center;
@@ -1089,7 +1089,7 @@ h2 .lime {
   transform: translateX(-50%);
   width: 120vw;
   height: 50vh;
-  background: radial-gradient(60% 100% at 50% 100%, rgba(203, 251, 68, 0.18), transparent 70%);
+  background: radial-gradient(60% 100% at 50% 100%, rgba(237, 170, 60, 0.18), transparent 70%);
   z-index: 1;
 }
 .final .clouds {
