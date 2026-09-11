@@ -644,12 +644,13 @@ h1 .lime {
 .hero .lede {
   max-width: 520px;
   font-size: clamp(17px, 2vw, 21px);
-  color: var(--muted);
+  color: #2c4259;
   font-weight: 500;
   margin-bottom: 42px;
+  text-shadow: 0 1px 16px rgba(255, 255, 255, 0.55);
 }
 .hero .lede b {
-  color: var(--white);
+  color: #0f2238;
   font-weight: 600;
 }
 .cta-row {
